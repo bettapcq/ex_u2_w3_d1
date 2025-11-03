@@ -57,7 +57,7 @@ form.addEventListener('submit', (e) => {
       sameOwnerPets.forEach((pet) => {
         const liSame = document.createElement('li');
         liSame.innerHTML = `${pet.name}`;
-        sameOwnerList.appendChild(liSame);
+        sameOwnerList.appendChild(liSame);  //non funziona come vorrei
       });
     } else {
       sameOwnerList.innerHTML =
