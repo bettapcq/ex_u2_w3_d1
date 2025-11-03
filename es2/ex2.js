@@ -11,7 +11,7 @@ class Pet {
       return true;
     } else {
       return false;
-    }  // come lo applico al form??
+    } // come lo applico al form??
   };
 }
 
@@ -48,10 +48,24 @@ form.addEventListener('submit', (e) => {
     `;
 
     petsList.appendChild(newLi);
+
+    const sameOwnerPets = allPets.filter(function (pet) {
+      return newPet.isTheSameOwner(pet);
+    });
+
+    if (sameOwnerPets.length > 1) {
+      sameOwnerPets.forEach((pet) => {
+        const liSame = document.createElement('li');
+        liSame.innerHTML = `${pet.name}`;
+        sameOwnerList.appendChild(liSame);
+      });
+    } else {
+      sameOwnerList.innerHTML =
+        '<li>Nessun altro animale con lo stesso proprietario.</li>';
+    }
   };
 
   addPetToList(newPet);
 
   form.reset();
 });
-
