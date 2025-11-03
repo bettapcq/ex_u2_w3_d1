@@ -49,21 +49,54 @@ form.addEventListener('submit', (e) => {
 
     petsList.appendChild(newLi);
 
-    const sameOwnerPets = allPets.filter(function (pet) {
-      return newPet.isTheSameOwner(pet);
-    });
+     // QUESTA non funziona come vorrei:
+    // const sameOwnerPets = allPets.filter(function (pet) {
+    //   return newPet.isTheSameOwner(pet);
+    // });
 
-    if (sameOwnerPets.length > 1) {
-      sameOwnerPets.forEach((pet) => {
-        const liSame = document.createElement('li');
-        liSame.innerHTML = `${pet.name}`;
-        sameOwnerList.appendChild(liSame);  //non funziona come vorrei
-      });
-    } else {
-      sameOwnerList.innerHTML =
-        '<li>Nessun altro animale con lo stesso proprietario.</li>';
+    // if (sameOwnerPets.length > 1) {
+    //   sameOwnerPets.forEach((pet) => {
+    //     const liSame = document.createElement('li');
+    //     liSame.innerHTML = `${pet.name}`;
+    //     sameOwnerList.appendChild(liSame); 
+    //   });
+    // } else {
+    //   sameOwnerList.innerHTML =
+    //     '<li>Nessun altro animale con lo stesso proprietario.</li>';
+
+    //SOLUZIONE CON REDUCE:
+
+    const groupedByOwner = allPets.reduce((acc, pet) => {
+      const owner = pet.owner;
+      if (!acc[owner]) {
+        acc[owner] = [];
+      }
+      acc[owner].push(pet);
+      return acc;
+    }, {});
+
+    sameOwnerList.innerHTML = '';
+
+    for (const owner in groupedByOwner) {
+      if (Object.hasOwnProperty.call(groupedByOwner, owner)) {
+        const petsForOwner = groupedByOwner[owner];
+
+        const ownerHeader = document.createElement('h4');
+        ownerHeader.innerText = `Owner: ${owner}`;
+        sameOwnerList.appendChild(ownerHeader);
+
+        const ul = document.createElement('ul');
+        petsForOwner.forEach((pet) => {
+          const li = document.createElement('li');
+          li.innerHTML = `${pet.name}`;
+          ul.appendChild(li);
+        });
+        sameOwnerList.appendChild(ul);
+      }
     }
   };
+
+  // fine soluzione
 
   addPetToList(newPet);
 
